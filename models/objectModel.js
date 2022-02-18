@@ -14,6 +14,11 @@ const objectSchema = new mongoose.Schema({
     required: [true, 'A model must have a model file .fbx'],
     trim: true,
   },
+  user: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'User',
+    required: [true, 'Model must belong to a user.'],
+  },
   createdAt: {
     type: Date,
     default: Date.now(),

@@ -5,6 +5,14 @@ const authController = require('../controllers/authController');
 const router = express.Router();
 
 router
+  .route('/currentUserObjects')
+  .get(
+    authController.protect,
+    authController.restrictTo('premium'),
+    objectController.getCurrentUserObjects
+  );
+
+router
   .route('/')
   .get(
     authController.protect,
