@@ -5,8 +5,11 @@ const objectRoutes = require('./routes/objectRoutes');
 const userRoutes = require('./routes/userRoutes');
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
+const cors = require('cors');
 
 const app = express();
+
+app.use(cors());
 
 console.log(process.env.NODE_ENV);
 if (process.env.NODE_ENV === 'development') {
