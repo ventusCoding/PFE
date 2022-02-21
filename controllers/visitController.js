@@ -141,3 +141,34 @@ exports.getCurrentUserVisits = catchasync(async (req, res, next) => {
     });
   }
 });
+
+exports.deleteUserFromVisit = catchasync(async (req, res, next) => {
+
+  if (!req.body.user) {
+    return next(new AppError('You need to choose a user to remove it.', 404));
+  }
+
+  const user = await User.findById(req.body.user);
+
+  if (!user) {
+    return next(new AppError('No user found with that id.', 404));
+  }
+
+  const visit = await VisitModel.findById(req.params.id);
+
+  if (!visit) {
+    return next(new AppError('No object found with that ID', 404));
+  }
+
+  if (visit.userOwner.toString() !== req.user._id.toString()) {
+    return next(
+      new AppError('You are not authorized to access this visit', 401)
+    );
+  }
+
+  visit.users = visit.users.filter((user) => user.toString() !== req.body.user);
+
+  const updatedVisit = await visit.save();
+
+  res.status(200).json({ status: 'success', data: { visit: updatedVisit } });
+});

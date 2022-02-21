@@ -25,8 +25,7 @@ router
     visitController.createVisit
   );
 
-
-  router
+router
   .route('/:id')
   .get(
     authController.protect,
@@ -37,6 +36,11 @@ router
     authController.protect,
     authController.restrictTo('premium'),
     visitController.addUserToVisit
+  )
+  .delete(
+    authController.protect,
+    authController.restrictTo('premium'),
+    visitController.deleteUserFromVisit
   );
 
 module.exports = router;
