@@ -8,6 +8,7 @@ const hpp = require("hpp");
 
 const objectRoutes = require('./routes/objectRoutes');
 const userRoutes = require('./routes/userRoutes');
+const visitRoutes = require('./routes/visitRoutes');
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
 const cors = require('cors');
@@ -48,6 +49,7 @@ app.use(express.static(`${__dirname}/public`));
 
 app.use('/api/v1/objects', objectRoutes);
 app.use('/api/v1/users', userRoutes);
+app.use('/api/v1/visits', visitRoutes);
 
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
