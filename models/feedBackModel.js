@@ -4,7 +4,6 @@ const feedBackSchema = new mongoose.Schema({
   title: {
     type: String,
     required: [true, 'A feedBack must have a title'],
-    unique: true,
     trim: true,
     maxlength: [
       10,
@@ -18,7 +17,6 @@ const feedBackSchema = new mongoose.Schema({
   description: {
     type: String,
     required: [true, 'A feedBack must have a description'],
-    unique: true,
     trim: true,
     maxlength: [
       50,
@@ -40,3 +38,7 @@ const feedBackSchema = new mongoose.Schema({
     select: false,
   },
 });
+
+const FeedBack = mongoose.model('FeedBack', feedBackSchema);
+
+module.exports = FeedBack;
