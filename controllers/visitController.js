@@ -42,9 +42,6 @@ exports.createVisit = catchasync(async (req, res, next) => {
     return next(new AppError('No object found with that ID', 404));
   }
 
-  console.log(model[0].user);
-  console.log(req.user._id.toString());
-
   if (model[0].user.toString() !== req.user._id.toString()) {
     return next(
       new AppError('You are not authorized to access this object', 401)
@@ -59,38 +56,53 @@ exports.createVisit = catchasync(async (req, res, next) => {
   res.status(201).json({ status: 'success', data: { visit: newVisit } });
 });
 
-exports.addUserToVisit = catchasync(async (req, res, next) => {
-  if (!req.body.user) {
-    return next(new AppError('You need to choose a user to add it.', 404));
+exports.addUsersToVisit = catchasync(async (req, res, next) => {
+  if (!req.body.users) {
+    return next(new AppError('You need to choose a users to add them.', 404));
   }
-
-  const user = await User.findById(req.body.user);
-
-  if (!user) {
-    return next(new AppError('No user found with that id.', 404));
-  }
-
   const visit = await VisitModel.findById(req.params.id);
 
   if (!visit) {
-    return next(new AppError('No object found with that ID', 404));
+    return next(new AppError('No visit found with that ID', 404));
   }
 
-  if (visit.userOwner.toString() !== req.user._id.toString()) {
+  if (visit.userOwner._id.toString() !== req.user._id.toString()) {
     return next(
       new AppError('You are not authorized to access this visit', 401)
     );
   }
 
-  if (visit.users.includes(user._id)) {
-    return next(new AppError('This user is already in this visit.', 404));
+  const users = await User.find({ _id: { $in: req.body.users } });
+
+  if (users.length === 0) {
+    return next(new AppError('Users Not found', 404));
   }
 
-  visit.users.push(req.body.user);
+  //check if user add himself
 
-  const updatedVisit = await visit.save();
+  if (users.some((user) => user._id.toString() === req.user._id.toString())) {
+    return next(new AppError('You can not add yourself', 404));
+  }
 
-  res.status(200).json({ status: 'success', data: { visit: updatedVisit } });
+        // users.filter(function (user) {
+    //   !visit.users.find(function (visitUser) {
+    //     if(user._id.toString() === visitUser._id.toString()){
+    //       return next(new AppError(`${user.name} already added to this visit`, 400));
+    //     }
+    //   });
+    // });
+
+  //check if there is user that already added to visit
+  const usersToAdd = users.filter(
+    (user) => !visit.users.find((visitUser) => user._id.toString() === visitUser._id.toString())
+  );
+  
+  visit.users.push(...usersToAdd);
+
+  await visit.save();
+
+  res.status(201).json({ status: 'success', data: { visit } });
+  // res.status(201).json({ status: 'success', data: { users } });
 });
 
 exports.getVisitById = catchasync(async (req, res, next) => {
@@ -100,7 +112,7 @@ exports.getVisitById = catchasync(async (req, res, next) => {
     return next(new AppError('No object found with that ID', 404));
   }
 
-  if (visit.userOwner.toString() !== req.user._id.toString()) {
+  if (visit.userOwner._id.toString() !== req.user._id.toString()) {
     return next(
       new AppError('You are not authorized to access this visit', 401)
     );
@@ -110,10 +122,10 @@ exports.getVisitById = catchasync(async (req, res, next) => {
 });
 
 exports.getCurrentUserVisits = catchasync(async (req, res, next) => {
-    const features = new APIFeatures(
-        VisitModel.find({ userOwner: req.user._id }),
-        req.query
-      )
+  const features = new APIFeatures(
+    VisitModel.find({ userOwner: req.user._id }),
+    req.query
+  )
     .filter()
     .sort()
     .limitFields()
@@ -143,7 +155,6 @@ exports.getCurrentUserVisits = catchasync(async (req, res, next) => {
 });
 
 exports.deleteUserFromVisit = catchasync(async (req, res, next) => {
-
   if (!req.body.user) {
     return next(new AppError('You need to choose a user to remove it.', 404));
   }
@@ -160,7 +171,7 @@ exports.deleteUserFromVisit = catchasync(async (req, res, next) => {
     return next(new AppError('No object found with that ID', 404));
   }
 
-  if (visit.userOwner.toString() !== req.user._id.toString()) {
+  if (visit.userOwner._id.toString() !== req.user._id.toString()) {
     return next(
       new AppError('You are not authorized to access this visit', 401)
     );

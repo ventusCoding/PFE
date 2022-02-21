@@ -35,7 +35,7 @@ router
   .patch(
     authController.protect,
     authController.restrictTo('premium'),
-    visitController.addUserToVisit
+    visitController.addUsersToVisit
   )
   .delete(
     authController.protect,

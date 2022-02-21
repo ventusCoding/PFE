@@ -1,6 +1,8 @@
 const User = require("../Models/userModel");
-const AppError = require("../utils/appError");
-const catchAsync = require("../utils/catchAsync");
+const APIFeatures = require('../utils/apiFeatures');
+const AppError = require('../utils/appError');
+const catchasync = require('../utils/catchAsync');
+
 
 
 const filterObj = (obj, ...allowedFields) => {
@@ -12,14 +14,39 @@ const filterObj = (obj, ...allowedFields) => {
   };
   
 
-exports.getAllUsers = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined',
-  });
-};
+exports.getAllUsers = catchasync(async (req, res, next) => {
+  const features = new APIFeatures(User.find(), req.query)
+    .filter()
+    .sort()
+    .limitFields()
+    .paginate();
 
-exports.deleteMe = catchAsync(async (req, res, next) => {
+  const users = await features.query;
+
+  if (users.length > 0) {
+    res.status(200).json({
+      status: 'success',
+      requestedAt: req.requestTime,
+      results: users.length,
+      data: {
+        users,
+      },
+    });
+  } else {
+    res.status(404).json({
+      status: 'fail',
+      results: 0,
+      data: {
+        users,
+      },
+      message: 'No Data Found!',
+    });
+  }
+
+
+});
+
+exports.deleteMe = catchasync(async (req, res, next) => {
   await User.findByIdAndUpdate(req.user.id, { active: false });
 
   res.status(204).json({
@@ -28,7 +55,7 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.updateMe = catchAsync(async (req, res, next) => {
+exports.updateMe = catchasync(async (req, res, next) => {
   if (req.body.password || req.body.passwordConfirm) {
     return next(
       new AppError(

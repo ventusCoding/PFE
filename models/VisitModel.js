@@ -24,6 +24,18 @@ const visitSchema = new mongoose.Schema({
   },
 });
 
+visitSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: "userOwner",
+    select: "name photo",
+  }).populate({
+    path: "users",
+    select: "name photo",
+  });
+
+  next();
+});
+
 const Visit = mongoose.model('Visit', visitSchema);
 
 module.exports = Visit;
