@@ -4,6 +4,7 @@ const AppError = require('../utils/appError');
 const catchasync = require('../utils/catchAsync');
 const ModelObject = require('../models/objectModel');
 const User = require('../Models/userModel');
+const mongoose = require('mongoose');
 
 exports.getAllVisits = catchasync(async (req, res, next) => {
   const features = new APIFeatures(VisitModel.find(), req.query)
@@ -76,7 +77,7 @@ exports.updateVisit = catchasync(async (req, res, next) => {
   //   return next(
   //     new AppError('Choose an object to update', 400)
   //   );
-    
+
   // }
 
   // const updatedVisit = await VisitModel.findByIdAndUpdate(
@@ -89,7 +90,9 @@ exports.updateVisit = catchasync(async (req, res, next) => {
   // );
 
   // res.status(200).json({ status: 'success', data: { visit: updatedVisit } });
-  res.status(200).json({ status: 'success', message: "this route is not defined " });
+  res
+    .status(200)
+    .json({ status: 'success', message: 'this route is not defined ' });
 });
 
 exports.addUsersToVisit = catchasync(async (req, res, next) => {
@@ -125,19 +128,22 @@ exports.addUsersToVisit = catchasync(async (req, res, next) => {
     return next(new AppError('You can not add yourself', 404));
   }
 
-        // users.filter(function (user) {
-    //   !visit.users.find(function (visitUser) {
-    //     if(user._id.toString() === visitUser._id.toString()){
-    //       return next(new AppError(`${user.name} already added to this visit`, 400));
-    //     }
-    //   });
-    // });
+  // users.filter(function (user) {
+  //   !visit.users.find(function (visitUser) {
+  //     if(user._id.toString() === visitUser._id.toString()){
+  //       return next(new AppError(`${user.name} already added to this visit`, 400));
+  //     }
+  //   });
+  // });
 
   //check if there is user that already added to visit
   const usersToAdd = users.filter(
-    (user) => !visit.users.find((visitUser) => user._id.toString() === visitUser._id.toString())
+    (user) =>
+      !visit.users.find(
+        (visitUser) => user._id.toString() === visitUser._id.toString()
+      )
   );
-  
+
   visit.users.push(...usersToAdd);
 
   await visit.save();
@@ -147,18 +153,30 @@ exports.addUsersToVisit = catchasync(async (req, res, next) => {
 });
 
 exports.getVisitById = catchasync(async (req, res, next) => {
-  const visit = await VisitModel.findById(req.params.id);
+  const visit = await VisitModel.findById(req.params.id).populate('comments');
 
   if (!visit) {
     return next(new AppError('No object found with that ID', 404));
   }
+  //*********************************************** */
 
-  if (visit.userOwner._id.toString() !== req.user._id.toString()) {
-    return next(
-      new AppError('You are not authorized to access this visit', 401)
-    );
+  let user = [];
+
+  if (req.user._id.valueOf() === visit.userOwner._id.valueOf()) {
+    user.push(visit.userOwner);
+  } else {
+    user = await VisitModel.find({
+      _id: req.params.id,
+      users: { _id: mongoose.Types.ObjectId(req.user._id.valueOf()) },
+    });
   }
 
+  console.log(user);
+
+  if (user.length <= 0) {
+    return next(new AppError('User is not in visit', 404));
+  }
+  //*********************************************** */
   res.status(200).json({ status: 'success', data: { visit } });
 });
 
@@ -218,9 +236,36 @@ exports.deleteUserFromVisit = catchasync(async (req, res, next) => {
     );
   }
 
-  visit.users = visit.users.filter((user) => user.toString() !== req.body.user);
+  //update visit.users array
 
-  const updatedVisit = await visit.save();
+  // VisitModel.updateMany(
+  //   { 
+  //     _id: req.params.id,
+  //     "users": { $in: req.body.user } 
+  //   },
+  //   {
+  //     $pull: {
+  //       "users.$[]": { $in: [req.body.user] }
+  //     }
+  //   }
+  // )
 
-  res.status(200).json({ status: 'success', data: { visit: updatedVisit } });
+  // visit.users = visit.users.filter(
+  //   (user) => user._id.toString() !== req.body.user.toString()
+  // );
+
+
+  //TODO: FIX THIS
+
+  // // console.log(visit.users);
+  // visit.users.filter((user) => {
+  //   // console.log('***************');
+  //   // console.log(user);
+  //   return user.toString() !== req.body.user;
+  // });
+
+  // // const updatedVisit = await visit.save();
+  // console.log(visit.users);
+
+  res.status(200).json({ status: 'success', data: { visit: visit.users } });
 });

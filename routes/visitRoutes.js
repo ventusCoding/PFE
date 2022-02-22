@@ -13,6 +13,14 @@ router
   );
 
 router
+  .route('/addUsersToVisit')
+  .patch(
+    authController.protect,
+    authController.restrictTo('premium'),
+    visitController.addUsersToVisit
+  );
+
+router
   .route('/')
   .get(
     authController.protect,
@@ -29,7 +37,6 @@ router
   .route('/:id')
   .get(
     authController.protect,
-    authController.restrictTo('premium'),
     visitController.getVisitById
   )
   .patch(
@@ -42,14 +49,5 @@ router
     authController.restrictTo('premium'),
     visitController.deleteUserFromVisit
   );
-
-  router
-  .route('/addUsersToVisit')
-  .patch(
-    authController.protect,
-    authController.restrictTo('premium'),
-    visitController.addUsersToVisit
-  )
-
 
 module.exports = router;
