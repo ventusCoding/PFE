@@ -35,12 +35,21 @@ router
   .patch(
     authController.protect,
     authController.restrictTo('premium'),
-    visitController.addUsersToVisit
+    visitController.updateVisit
   )
   .delete(
     authController.protect,
     authController.restrictTo('premium'),
     visitController.deleteUserFromVisit
   );
+
+  router
+  .route('/addUsersToVisit')
+  .patch(
+    authController.protect,
+    authController.restrictTo('premium'),
+    visitController.addUsersToVisit
+  )
+
 
 module.exports = router;

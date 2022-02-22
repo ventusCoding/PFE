@@ -56,11 +56,52 @@ exports.createVisit = catchasync(async (req, res, next) => {
   res.status(201).json({ status: 'success', data: { visit: newVisit } });
 });
 
+exports.updateVisit = catchasync(async (req, res, next) => {
+  //TODO:Fix this
+  // const visit = await VisitModel.findById(req.params.id);
+
+  // if (!visit) {
+  //   return next(new AppError('No visit found with that ID', 404));
+  // }
+
+  // if (visit.userOwner._id.toString() !== req.user._id.toString()) {
+  //   console.log(visit.userOwner.toString());
+  //   console.log(req.user._id.toString());
+  //   return next(
+  //     new AppError('You are not authorized to access this object', 401)
+  //   );
+  // }
+
+  // if(!req.body.modelfbx){
+  //   return next(
+  //     new AppError('Choose an object to update', 400)
+  //   );
+    
+  // }
+
+  // const updatedVisit = await VisitModel.findByIdAndUpdate(
+  //   req.params.id,
+  //   req.body.modelfbx,
+  //   {
+  //     new: true,
+  //     runValidators: true,
+  //   }
+  // );
+
+  // res.status(200).json({ status: 'success', data: { visit: updatedVisit } });
+  res.status(200).json({ status: 'success', message: "this route is not defined " });
+});
+
 exports.addUsersToVisit = catchasync(async (req, res, next) => {
   if (!req.body.users) {
-    return next(new AppError('You need to choose a users to add them.', 404));
+    return next(new AppError('You need to choose a users to add them.', 400));
   }
-  const visit = await VisitModel.findById(req.params.id);
+
+  if (!req.body.visit) {
+    return next(new AppError('You need to choose a visit', 400));
+  }
+
+  const visit = await VisitModel.findById(req.body.visit);
 
   if (!visit) {
     return next(new AppError('No visit found with that ID', 404));
