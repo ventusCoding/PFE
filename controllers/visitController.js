@@ -214,20 +214,22 @@ exports.getCurrentUserVisits = catchasync(async (req, res, next) => {
 });
 
 exports.deleteUserFromVisit = catchasync(async (req, res, next) => {
-  if (!req.body.user) {
-    return next(new AppError('You need to choose a user to remove it.', 404));
+  if (!req.body.users || req.body.users.length <= 0) {
+    return next(
+      new AppError('You need to choose a users to remove them.', 400)
+    );
   }
 
-  const user = await User.findById(req.body.user);
+  // const user = await User.findById(req.body.user);
 
-  if (!user) {
-    return next(new AppError('No user found with that id.', 404));
-  }
+  // if (!user) {
+  //   return next(new AppError('No user found with that id.', 404));
+  // }
 
   const visit = await VisitModel.findById(req.params.id);
 
   if (!visit) {
-    return next(new AppError('No object found with that ID', 404));
+    return next(new AppError('No Visit found with that ID', 404));
   }
 
   if (visit.userOwner._id.toString() !== req.user._id.toString()) {
@@ -236,36 +238,18 @@ exports.deleteUserFromVisit = catchasync(async (req, res, next) => {
     );
   }
 
-  //update visit.users array
+  visit.users = containsAny(visit.users, req.body.users);
 
-  // VisitModel.updateMany(
-  //   { 
-  //     _id: req.params.id,
-  //     "users": { $in: req.body.user } 
-  //   },
-  //   {
-  //     $pull: {
-  //       "users.$[]": { $in: [req.body.user] }
-  //     }
-  //   }
-  // )
-
-  // visit.users = visit.users.filter(
-  //   (user) => user._id.toString() !== req.body.user.toString()
-  // );
+  await VisitModel.findByIdAndUpdate(req.params.id, visit);
 
 
-  //TODO: FIX THIS
-
-  // // console.log(visit.users);
-  // visit.users.filter((user) => {
-  //   // console.log('***************');
-  //   // console.log(user);
-  //   return user.toString() !== req.body.user;
-  // });
-
-  // // const updatedVisit = await visit.save();
-  // console.log(visit.users);
-
-  res.status(200).json({ status: 'success', data: { visit: visit.users } });
+  res.status(200).json({ status: 'success', data: { visit: visit } });
 });
+
+function containsAny(source, target) {
+  var result = source.filter(function (item) {
+    console.log(item._id.toHexString());
+    return !(target.indexOf(item._id.toHexString()) > -1);
+  });
+  return result;
+}
