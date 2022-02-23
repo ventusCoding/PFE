@@ -27,6 +27,10 @@ const handleJWTError = () =>
 const handleJWTExpiredError = () =>
   new AppError('Your token has expired! Please log in again.', 401);
 
+
+const handleMulterError = () =>   new AppError('You need to choose only 1 file to upload.', 401);
+
+
 const sendErrorDev = (err, res) => {
   res.status(err.statusCode).json({
     status: err.status,
@@ -65,6 +69,7 @@ module.exports = (err, req, res, next) => {
     if (err.name == 'ValidationError') err = handleValidationErrorDB(err);
     if (err.name == 'JsonWebTokenError') err = handleJWTError();
     if (err.name == 'TokenExpiredError') err = handleJWTExpiredError();
+    if (err.code == 'LIMIT_UNEXPECTED_FILE') err = handleMulterError();
 
     sendErrorProd(err, res);
   }
