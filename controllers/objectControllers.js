@@ -2,11 +2,32 @@ const ModelObject = require('../models/objectModel');
 const APIFeatures = require('../utils/apiFeatures');
 const AppError = require('../utils/appError');
 const catchasync = require('../utils/catchAsync');
+const multer = require('multer');
+
+const multerStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, `public/models`);
+  },
+  filename: (req, file, cb) => {
+    const ext = file.originalname.split('.')[1];
+    if (ext !== 'fbx') {
+      return cb(new AppError('A model must have a model file .fbx', 400));
+    }
+
+    cb(null, `model-${req.user.name}-${Date.now()}.${ext}`);
+  },
+});
+
+const upload = multer({
+  storage: multerStorage,
+});
+
+exports.uploadModel = upload.single('modelfbx');
 
 exports.createObject = catchasync(async (req, res, next) => {
   const newObj = await ModelObject.create({
     name: req.body.name,
-    modelfbx: req.body.modelfbx,
+    modelfbx: req.file.filename,
     user: req.user._id,
   });
 
@@ -30,19 +51,31 @@ exports.getObjectById = catchasync(async (req, res, next) => {
 });
 
 exports.updateObject = catchasync(async (req, res, next) => {
-  // const object = await ModelObject.findByIdAndUpdate(req.params.id, req.body, {
-  //   new: true,
-  //   runValidators: true,
-  // });
+  let obj = {};
 
-  // if (!object) {
-  //   return next(new AppError('No object found with that ID', 404));
-  // }
+  if (req.body.name) {
+    obj.name =req.body.name ;
+  }
 
-  // res.status(200).json({ status: 'success', data: { object } });
-  res
-    .status(200)
-    .json({ status: 'success', message: 'this route is not yet defined' });
+  if (req.file) {
+    obj.modelfbx = req.file.filename;
+  }
+
+  if (Object.keys(obj).length === 0) {
+    return next(new AppError('Nothing to update', 400));
+  }
+
+  const updatedObj = await ModelObject.findByIdAndUpdate(req.params.id, obj, {
+    new: true,
+    runValidators: true,
+  });
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      updatedObj,
+    },
+  });
 });
 
 exports.deleteObject = catchasync(async (req, res, next) => {
