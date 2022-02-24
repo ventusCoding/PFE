@@ -125,21 +125,21 @@ exports.getreportById = catchasync(async (req, res, next) => {
 });
 
 exports.getAllreports = catchasync(async (req, res, next) => {
-  const features = new APIFeatures(FeedBack.find(), req.query)
+  const features = new APIFeatures(Report.find(), req.query)
     .filter()
     .sort()
     .limitFields()
     .paginate();
 
-  const feedbacks = await features.query;
+  const report = await features.query;
 
-  if (feedbacks.length > 0) {
+  if (report.length > 0) {
     res.status(200).json({
       status: 'success',
       requestedAt: req.requestTime,
-      results: feedbacks.length,
+      results: report.length,
       data: {
-        feedbacks,
+        report,
       },
     });
   } else {
@@ -147,7 +147,7 @@ exports.getAllreports = catchasync(async (req, res, next) => {
       status: 'fail',
       results: 0,
       data: {
-        feedbacks,
+        report,
       },
       message: 'No Data Found!',
     });
