@@ -115,13 +115,13 @@ exports.createreport = catchasync(async (req, res, next) => {
 });
 
 exports.getreportById = catchasync(async (req, res, next) => {
-  const feedback = await FeedBack.findById(req.params.id);
+  const report = await Report.findById(req.params.id);
 
-  if (!feedback) {
-    return next(new AppError('No feedback found with that ID', 404));
+  if (!report) {
+    return next(new AppError('No report found with that ID', 404));
   }
 
-  res.status(200).json({ status: 'success', data: { feedback } });
+  res.status(200).json({ status: 'success', data: { report } });
 });
 
 exports.getAllreports = catchasync(async (req, res, next) => {
