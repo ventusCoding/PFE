@@ -12,12 +12,12 @@ exports.createComment = catchasync(async (req, res, next) => {
 
   let user = [];
 
-  if (req.body.user === visit.userOwner._id.valueOf()) {
+  if (req.user.id === visit.userOwner._id.valueOf()) {
     user.push(visit.userOwner);
   } else {
     user = await Visit.find({
       _id: req.body.visit,
-      users: { _id: mongoose.Types.ObjectId(req.body.user) },
+      users: { _id: mongoose.Types.ObjectId(req.user.id) },
     });
   }
 
@@ -27,7 +27,7 @@ exports.createComment = catchasync(async (req, res, next) => {
 
   const newComment = await Comment.create({
     description: req.body.description,
-    user: req.body.user,
+    user: req.user.id,
     visit: req.body.visit,
   });
 
