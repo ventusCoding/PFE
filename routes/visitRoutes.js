@@ -1,6 +1,7 @@
 const express = require('express');
 const visitController = require('../controllers/visitController');
 const authController = require('../controllers/authController');
+const objectController = require('../controllers/objectControllers');
 
 const router = express.Router();
 
@@ -42,6 +43,7 @@ router
   .patch(
     authController.protect,
     authController.restrictTo('premium'),
+    objectController.uploadModel,
     visitController.updateVisit
   )
   .delete(
