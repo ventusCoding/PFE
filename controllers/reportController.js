@@ -28,7 +28,7 @@ exports.uploadReportImage = upload.single('image');
 exports.resizeReportImage = catchasync(async (req, res, next) => {
   if (!req.file) return next();
 
-  req.file.filename = `report-${uuid()}-${Date.now()}.jpeg`;
+  req.file.filename = `report-${req.user.name}-${uuid()}-${Date.now()}.jpeg`;
 
   await sharp(req.file.buffer)
     .resize(500, 500)
