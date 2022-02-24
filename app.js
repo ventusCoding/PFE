@@ -9,6 +9,7 @@ const hpp = require('hpp');
 const objectRoutes = require('./routes/objectRoutes');
 const userRoutes = require('./routes/userRoutes');
 const feedBackRoutes = require('./routes/feedBackRoutes');
+const reportRoutes = require('./routes/reportRoutes');
 const visitRoutes = require('./routes/visitRoutes');
 const commentRoutes = require('./routes/commentRoutes');
 const AppError = require('./utils/appError');
@@ -55,6 +56,7 @@ app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/visits', visitRoutes);
 app.use('/api/v1/feedbacks', feedBackRoutes);
 app.use('/api/v1/comments', commentRoutes);
+app.use('/api/v1/reports', reportRoutes);
 
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));

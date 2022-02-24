@@ -62,7 +62,7 @@ exports.updateObject = catchasync(async (req, res, next) => {
   }
 
   if (Object.keys(obj).length === 0) {
-    return next(new AppError('Nothing to update', 400));
+    return next(new AppError('Nothing to update', 404));
   }
 
   const updatedObj = await ModelObject.findByIdAndUpdate(req.params.id, obj, {

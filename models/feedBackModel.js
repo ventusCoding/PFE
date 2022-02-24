@@ -19,8 +19,8 @@ const feedBackSchema = new mongoose.Schema({
     required: [true, 'A feedBack must have a description'],
     trim: true,
     maxlength: [
-      50,
-      'A feedBack description must have less or equal than 50 characters',
+      255,
+      'A feedBack description must have less or equal than 255 characters',
     ],
     minlength: [
       10,
