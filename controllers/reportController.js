@@ -42,6 +42,27 @@ exports.resizeReportImage = catchasync(async (req, res, next) => {
 exports.createreport = catchasync(async (req, res, next) => {
   let newReport = {};
 
+  if (req.body.type === 'bug') {
+    if (!req.body.bugType) {
+      return next(new AppError('Report must belong to a bug.', 400));
+    }
+
+    const bugValues = ['Technical problem', 'Access problem', 'Other'];
+
+    if (!(bugValues.indexOf(req.body.bugType) >= 0)) {
+      return next(
+        new AppError(`Bug type need to be in this values : ${bugValues}`, 400)
+      );
+    }
+
+    newReport = {
+      type: req.body.type,
+      reportUser:req.user.id,
+      bugType: req.body.bugType,
+      description: req.body.description,
+    };
+  }
+
   if (req.body.type === 'comment') {
     if (!req.body.comment) {
       return next(new AppError('Report must belong to a comment.', 400));
@@ -55,6 +76,7 @@ exports.createreport = catchasync(async (req, res, next) => {
 
     newReport = {
       type: req.body.type,
+      reportUser:req.user.id,
       description: req.body.description,
       comment: req.body.comment,
     };
@@ -73,6 +95,7 @@ exports.createreport = catchasync(async (req, res, next) => {
 
     newReport = {
       type: req.body.type,
+      reportUser:req.user.id,
       description: req.body.description,
       user: req.body.user,
     };
