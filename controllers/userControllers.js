@@ -40,7 +40,7 @@ exports.resizeUserPhoto = catchasync(async (req, res, next) => {
     req.file.filename = `user-${req.user.name}-${
       req.user.id
     }-${Date.now()}.jpeg`;
-  }else{
+  } else {
     req.file.filename = `user-${uuid()}-${Date.now()}.jpeg`;
   }
 
@@ -89,6 +89,16 @@ exports.getAllUsers = catchasync(async (req, res, next) => {
       message: 'No Data Found!',
     });
   }
+});
+
+exports.getUserById = catchasync(async (req, res, next) => {
+
+  const user = await User.findById(req.params.id);
+
+  res.status(200).json({
+    status: 'success',
+    data: user,
+  });
 });
 
 exports.deleteMe = catchasync(async (req, res, next) => {

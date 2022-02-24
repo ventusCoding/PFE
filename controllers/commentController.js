@@ -2,7 +2,7 @@ const Comment = require('../models/commentModel');
 const AppError = require('../utils/appError');
 const Visit = require('../models/VisitModel');
 const catchasync = require('../utils/catchAsync');
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
 exports.createComment = catchasync(async (req, res, next) => {
   const visit = await Visit.findById(req.body.visit);
@@ -24,7 +24,7 @@ exports.createComment = catchasync(async (req, res, next) => {
   if (user.length <= 0) {
     return next(new AppError('User is not in visit', 404));
   }
-  
+
   const newComment = await Comment.create({
     description: req.body.description,
     user: req.body.user,
@@ -35,8 +35,22 @@ exports.createComment = catchasync(async (req, res, next) => {
 });
 
 exports.getCommentById = catchasync(async (req, res, next) => {
-
   const comment = await Comment.findById(req.params.id).select('-__v');
 
   res.status(201).json({ status: 'success', comment });
+});
+
+exports.deleteComment = catchasync(async (req, res, next) => {
+  const comment = await Comment.findById(req.params.id).select('-__v');
+
+  if (
+    comment.user._id.toString() !==
+    mongoose.Types.ObjectId(req.user.id).toString()
+  ) {
+    return next(new AppError('You have no access to delete this comment', 401));
+  }
+
+  await Comment.findByIdAndDelete(req.params.id);
+
+  res.status(201).json({ status: 'success', data: null });
 });
