@@ -17,7 +17,7 @@ router
   .route('/')
   .get(
     authController.protect,
-    authController.restrictTo('premium'),
+    authController.restrictTo('admin'),
     objectController.getAllObjects
   )
   .post(

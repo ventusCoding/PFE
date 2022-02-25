@@ -110,6 +110,15 @@ exports.deleteMe = catchasync(async (req, res, next) => {
   });
 });
 
+exports.deleteUserByAdmin = catchasync(async (req, res, next) => {
+  await User.findByIdAndUpdate(req.params.id, { active: false });
+
+  res.status(204).json({
+    status: 'success',
+    data: null,
+  });
+});
+
 exports.updateMe = catchasync(async (req, res, next) => {
   // console.log(req.file);
   // console.log(req.body);

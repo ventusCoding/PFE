@@ -4,8 +4,6 @@ const authController = require('../controllers/authController');
 
 const router = express.Router();
 
-
-
 router.post(
   '/signup',
   userController.uploadUserPhoto,
@@ -32,8 +30,21 @@ router.patch(
 );
 router.delete('/deleteMe', authController.protect, userController.deleteMe);
 
-router.route('/:id').get(authController.protect, userController.getUserById);
+router
+  .route('/:id')
+  .get(authController.protect, userController.getUserById)
+  .delete(
+    authController.protect,
+    authController.restrictTo('admin'),
+    userController.deleteUserByAdmin
+  );
 
-router.route('/').get(authController.protect, userController.getAllUsers);
+router
+  .route('/')
+  .get(
+    authController.protect,
+    authController.restrictTo('admin'),
+    userController.getAllUsers
+  );
 
 module.exports = router;

@@ -8,6 +8,7 @@ router
   .route('/')
   .get(
     authController.protect,
+    authController.restrictTo('admin'),
     feedBackController.getAllFeedBacks
   )
   .post(

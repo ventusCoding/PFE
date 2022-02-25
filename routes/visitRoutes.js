@@ -21,11 +21,19 @@ router
     visitController.addUsersToVisit
   );
 
+  router
+  .route('/deleteUsersToVisit')
+  .patch(
+    authController.protect,
+    authController.restrictTo('premium',"admin"),
+    visitController.deleteUserFromVisit
+  );
+
 router
   .route('/')
   .get(
     authController.protect,
-    authController.restrictTo('premium'),
+    authController.restrictTo('admin'),
     visitController.getAllVisits
   )
   .post(
@@ -48,8 +56,8 @@ router
   )
   .delete(
     authController.protect,
-    authController.restrictTo('premium'),
-    visitController.deleteUserFromVisit
+    authController.restrictTo('premium',"admin"),
+    visitController.deleteVisit
   );
 
 module.exports = router;

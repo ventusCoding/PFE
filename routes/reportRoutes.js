@@ -6,7 +6,11 @@ const router = express.Router();
 
 router
   .route('/')
-  .get(authController.protect, reportController.getAllreports)
+  .get(
+    authController.protect,
+    authController.restrictTo('admin'),
+    reportController.getAllreports
+  )
   .post(
     authController.protect,
     reportController.uploadReportImage,

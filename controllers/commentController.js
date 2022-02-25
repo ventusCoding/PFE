@@ -46,6 +46,7 @@ exports.deleteComment = catchasync(async (req, res, next) => {
   if (
     comment.user._id.toString() !==
     mongoose.Types.ObjectId(req.user.id).toString()
+    && req.user.role.localeCompare("admin") !== 0
   ) {
     return next(new AppError('You have no access to delete this comment', 401));
   }
