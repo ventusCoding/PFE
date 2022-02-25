@@ -6,7 +6,7 @@ const multer = require('multer');
 
 const multerStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, `public/models`);
+    cb(null, `protected_files/models`);
   },
   filename: (req, file, cb) => {
     const ext = file.originalname.split('.')[1];

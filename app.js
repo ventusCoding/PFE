@@ -8,6 +8,7 @@ const hpp = require('hpp');
 
 const objectRoutes = require('./routes/objectRoutes');
 const userRoutes = require('./routes/userRoutes');
+const authController = require('./controllers/authController');
 const feedBackRoutes = require('./routes/feedBackRoutes');
 const reportRoutes = require('./routes/reportRoutes');
 const visitRoutes = require('./routes/visitRoutes');
@@ -16,6 +17,7 @@ const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+const fs = require('fs');
 
 const app = express();
 
@@ -35,7 +37,7 @@ const limiter = rateLimit({
 
 app.use('/api', limiter);
 
-app.use(express.json({ limit: '10kb' })); 
+app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 app.use(cookieParser());
 
@@ -50,6 +52,20 @@ app.use(
 );
 
 app.use(express.static(`${__dirname}/public`));
+
+app.get(
+  '/file/:path',
+  authController.protect,
+  authController.restrictTo('premium'),
+  authController.protectModels,
+  function (req, res) {
+    const path = 'protected_files/models/' + req.params.path;
+    const stream = fs.createReadStream(path);
+    const stats = fs.statSync(path);
+    stream.on('open', () => res.setHeader('Content-Length', stats.size));
+    stream.pipe(res);
+  }
+);
 
 app.use('/api/v1/objects', objectRoutes);
 app.use('/api/v1/users', userRoutes);

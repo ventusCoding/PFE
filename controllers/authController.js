@@ -5,6 +5,8 @@ const catchAsync = require('../utils/catchAsync');
 const jwt = require('jsonwebtoken');
 const AppError = require('../utils/appError');
 const sendEmail = require('../utils/email');
+const ObjectModel = require('../models/objectModel');
+const mongoose = require('mongoose');
 
 const signToken = (id) => {
   return jwt.sign({ id: id }, process.env.JWT_SECRET, {
@@ -45,11 +47,11 @@ exports.signup = catchAsync(async (req, res, next) => {
     passwordConfirm: req.body.passwordConfirm,
   });
 
-  if(req.file) {
+  if (req.file) {
     req.body.photo = req.file.filename;
     console.log('found file');
-    console.log( req.body.photo);
-    console.log( req.file.filename);
+    console.log(req.body.photo);
+    console.log(req.file.filename);
   }
 
   createSendToken(newUser, 201, res);
@@ -188,4 +190,14 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   await user.save();
 
   createSendToken(user, 200, res);
+});
+
+exports.protectModels = catchAsync(async (req, res, next) => {
+  const model = await ObjectModel.find({ modelfbx: req.params.path });
+
+  if (!model[0].user.equals(mongoose.Types.ObjectId(req.user.id))) {
+    return next(new AppError('You cannot access to this model.', 401));
+  }
+
+  next();
 });

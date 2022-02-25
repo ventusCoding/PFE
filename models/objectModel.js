@@ -11,6 +11,7 @@ const objectSchema = new mongoose.Schema({
   modelfbx: {
     type: String,
     trim: true,
+    unique: [true, 'Models cannot have the same name.'],
   },
   user: {
     type: mongoose.Schema.ObjectId,
