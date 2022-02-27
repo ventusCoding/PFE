@@ -1,1 +1,107 @@
-{}
+[
+  {
+    "name": "batiment ibn khaldoun",
+    "modelfbx": "batiment_ibn_khaldoun.fbx",
+    "user": "6218e9a85befa4d31a23874f"
+  },
+  {
+    "name": "batiment cite de la culture",
+    "modelfbx": "batiment_cite_de_la_culture.fbx",
+    "user": "6218e9a85befa4d31a23874f"
+  },
+  {
+    "name": "batiment riadh el andalos",
+    "modelfbx": "batiment_riadh_el_andalos.fbx",
+    "user": "6218e9a85befa4d31a23874f"
+  },
+  {
+    "name": "cafe de la culture",
+    "modelfbx": "cafe_de_la_culture.fbx",
+    "user": "6218e9a85befa4d31a23874f"
+  },
+  {
+    "name": "hotel mohamed",
+    "modelfbx": "hotel_mohamed.fbx",
+    "user": "6218e9a85befa4d31a238750"
+  },
+  {
+    "name": "hotel saada",
+    "modelfbx": "hotel_saada.fbx",
+    "user": "6218e9a85befa4d31a238750"
+  },
+  {
+    "name": "maison el jeld",
+    "modelfbx": "maison_el_jeld.fbx",
+    "user": "6218e9a85befa4d31a238750"
+  },
+  {
+    "name": "maison belgesem",
+    "modelfbx": "maison_belgesem.fbx",
+    "user": "6218e9a85befa4d31a238750"
+  },
+  {
+    "name": "maison el houari",
+    "modelfbx": "maison_el_houari.fbx",
+    "user": "6218e9a85befa4d31a238750"
+  },
+  {
+    "name": "societe de la culture",
+    "modelfbx": "societe_de_la_culture.fbx",
+    "user": "6218e9a85befa4d31a238751"
+  },
+  {
+    "name": "esprit lac 6",
+    "modelfbx": "esprit_lac_6.fbx",
+    "user": "6218e9a85befa4d31a238751"
+  },
+  {
+    "name": "sesame chargueya",
+    "modelfbx": "sesame_chargueya.fbx",
+    "user": "6218e9a85befa4d31a238751"
+  },
+  {
+    "name": "tekup mohamed 5",
+    "modelfbx": "tekup_mohamed_5.fbx",
+    "user": "6218e9a85befa4d31a238751"
+  },
+  {
+    "name": "pyramid ariana",
+    "modelfbx": "pyramid_ariana.fbx",
+    "user": "6218e9a85befa4d31a238751"
+  },
+  {
+    "name": "maison mohamed",
+    "modelfbx": "maison_mohamed.fbx",
+    "user": "6218e9a85befa4d31a238752"
+  },
+  {
+    "name": "maison lac 1",
+    "modelfbx": "maison_lac_1.fbx",
+    "user": "6218e9a85befa4d31a238752"
+  },
+  {
+    "name": "hotel landolsi",
+    "modelfbx": "hotel_landolsi.fbx",
+    "user": "6218e9a85befa4d31a238752"
+  },
+  {
+    "name": "hotel saha beach",
+    "modelfbx": "hotel_saha_beach.fbx",
+    "user": "6218e9a85befa4d31a238752"
+  },
+  {
+    "name": "restaurant el kheir",
+    "modelfbx": "restaurant_el_kheir.fbx",
+    "user": "6218e9a85befa4d31a238752"
+  },
+  {
+    "name": "batiment amal",
+    "modelfbx": "batiment_amal.fbx",
+    "user": "6218e9a85befa4d31a238754"
+  },
+  {
+    "name": "maison ahmed",
+    "modelfbx": "maison_ahmed.fbx",
+    "user": "6218e9a85befa4d31a238754"
+  }
+]

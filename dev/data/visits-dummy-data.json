@@ -1,1 +1,164 @@
-{}
+[
+  {
+    "userOwner": "6218e9a85befa4d31a238750",
+    "modelfbx": "6218ef10a5809a014270634a",
+    "users": [
+      "6218e9a85befa4d31a238762",
+      "6218e9a85befa4d31a238761",
+      "6218e9a85befa4d31a238760",
+      "6218e9a85befa4d31a23875f",
+      "6218e9a85befa4d31a23875e",
+      "6218e9a85befa4d31a23875d"
+    ]
+  },
+  {
+    "userOwner": "6218e9a85befa4d31a238751",
+    "modelfbx": "6218ef10a5809a014270634b",
+    "users": [
+      "6218e9a85befa4d31a238762",
+      "6218e9a85befa4d31a23875e",
+      "6218e9a85befa4d31a23875d",
+      "6218e9a85befa4d31a238760",
+      "6218e9a85befa4d31a238759"
+    ]
+  },
+  {
+    "userOwner": "6218e9a85befa4d31a238751",
+    "modelfbx": "6218ef10a5809a014270634c",
+    "users": [
+      "6218e9a85befa4d31a23875c",
+      "6218e9a85befa4d31a23875a",
+      "6218e9a85befa4d31a238760",
+      "6218e9a85befa4d31a238759",
+      "6218e9a85befa4d31a238758",
+      "6218e9a85befa4d31a238757"
+    ]
+  },
+  {
+    "userOwner": "6218e9a85befa4d31a238751",
+    "modelfbx": "6218ef10a5809a014270634d",
+    "users": ["6218e9a85befa4d31a238756"]
+  },
+  {
+    "userOwner": "6218e9a85befa4d31a238751",
+    "modelfbx": "6218ef10a5809a014270634e",
+    "users": [
+      "6218e9a85befa4d31a238755",
+      "6218e9a85befa4d31a238754",
+      "6218e9a85befa4d31a238753",
+      "6218e9a85befa4d31a238752"
+    ]
+  },
+  {
+    "userOwner": "6218e9a85befa4d31a238751",
+    "modelfbx": "6218ef10a5809a014270634f",
+    "users": [
+      "6218e9a85befa4d31a23874f",
+      "6218e9a85befa4d31a238754",
+      "6218e9a85befa4d31a238753",
+      "6218e9a85befa4d31a238752"
+    ]
+  },
+  {
+    "userOwner": "6218e9a85befa4d31a238752",
+    "modelfbx": "6218ef10a5809a0142706350"
+  },
+  {
+    "userOwner": "6218e9a85befa4d31a238752",
+    "modelfbx": "6218ef10a5809a0142706351",
+    "users": [
+      "6218e9a85befa4d31a23874f",
+      "6218e9a85befa4d31a238754",
+      "6218e9a85befa4d31a238753"
+    ]
+  },
+  {
+    "userOwner": "6218e9a85befa4d31a238752",
+    "modelfbx": "6218ef10a5809a0142706352",
+    "users": [
+      "6218e9a85befa4d31a23875c",
+      "6218e9a85befa4d31a238758",
+      "6218e9a85befa4d31a238757"
+    ]
+  },
+  {
+    "userOwner": "6218e9a85befa4d31a238752",
+    "modelfbx": "6218ef10a5809a0142706353",
+    "users": [
+      "6218e9a85befa4d31a23875c",
+      "6218e9a85befa4d31a23875a",
+      "6218e9a85befa4d31a238760",
+      "6218e9a85befa4d31a238759",
+      "6218e9a85befa4d31a238758",
+      "6218e9a85befa4d31a238757"
+    ]
+  },
+  {
+    "userOwner": "6218e9a85befa4d31a238752",
+    "modelfbx": "6218ef10a5809a0142706354",
+    "users": ["6218e9a85befa4d31a23875c"]
+  },
+  {
+    "userOwner": "6218e9a85befa4d31a238754",
+    "modelfbx": "6218ef10a5809a0142706355",
+    "users": ["6218e9a85befa4d31a238758", "6218e9a85befa4d31a238757"]
+  },
+  {
+    "userOwner": "6218e9a85befa4d31a238754",
+    "modelfbx": "6218ef10a5809a0142706356",
+    "users": [
+      "6218e9a85befa4d31a238750",
+      "6218e9a85befa4d31a23875a",
+      "6218e9a85befa4d31a238758",
+      "6218e9a85befa4d31a238757"
+    ]
+  },
+  {
+    "userOwner": "6218e9a85befa4d31a23874f",
+    "modelfbx": "6218ef10a5809a0142706343",
+    "users": [
+      "6218e9a85befa4d31a238750",
+      "6218e9a85befa4d31a23875a",
+      "6218e9a85befa4d31a238758",
+      "6218e9a85befa4d31a238757"
+    ]
+  },
+  {
+    "userOwner": "6218e9a85befa4d31a238750",
+    "modelfbx": "6218ef10a5809a0142706346",
+    "users": ["6218e9a85befa4d31a238758", "6218e9a85befa4d31a238757"]
+  },
+  {
+    "userOwner": "6218e9a85befa4d31a23874f",
+    "modelfbx": "6218ef10a5809a0142706344",
+    "users": ["6218e9a85befa4d31a238757"]
+  },
+  {
+    "userOwner": "6218e9a85befa4d31a238750",
+    "modelfbx": "6218ef10a5809a0142706347",
+    "users": ["6218e9a85befa4d31a238753", "6218e9a85befa4d31a238752"]
+  },
+  {
+    "userOwner": "6218e9a85befa4d31a23874f",
+    "modelfbx": "6218ef10a5809a0142706345"
+  },
+  {
+    "userOwner": "6218e9a85befa4d31a23874f",
+    "modelfbx": "6218ef10a5809a0142706342",
+    "users": [
+      "6218e9a85befa4d31a238754",
+      "6218e9a85befa4d31a238753",
+      "6218e9a85befa4d31a238752"
+    ]
+  },
+  {
+    "userOwner": "6218e9a85befa4d31a238750",
+    "modelfbx": "6218ef10a5809a0142706348",
+    "users": [
+      "6218e9a85befa4d31a23874f",
+      "6218e9a85befa4d31a238754",
+      "6218e9a85befa4d31a238753",
+      "6218e9a85befa4d31a238752"
+    ]
+  }
+]

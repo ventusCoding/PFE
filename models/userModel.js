@@ -21,6 +21,10 @@ const userSchema = new mongoose.Schema({
     enum: ['normal', 'premium', 'admin'],
     default: 'normal',
   },
+  verified: {
+    type: Boolean,
+    default: false,
+  },
   password: {
     type: String,
     required: [true, 'Please provide a password'],
@@ -50,6 +54,8 @@ const userSchema = new mongoose.Schema({
     default: true,
     select: false,
   },
+  verificationToken: String,
+  verificationExpires: Date,
 });
 
 userSchema.pre('save', async function (next) {
@@ -106,6 +112,20 @@ userSchema.methods.createPasswordResetToken = function () {
   console.log(resetToken);
 
   return resetToken;
+};
+
+userSchema.methods.createVerificationToken = function () {
+  const verificationToken = crypto.randomBytes(32).toString('hex');
+
+  this.verificationToken = crypto
+    .createHash('sha256')
+    .update(verificationToken)
+    .digest('hex');
+
+  this.verificationExpires = Date.now() + 10 * 60 * 1000;
+
+
+  return verificationToken;
 };
 
 const User = mongoose.model('User', userSchema);

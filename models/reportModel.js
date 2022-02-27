@@ -15,8 +15,8 @@ const reportSchema = new mongoose.Schema({
     required: [true, 'A report must have a description'],
     trim: true,
     maxlength: [
-      255,
-      'A report description must have less or equal than 255 characters',
+      500,
+      'A report description must have less or equal than 500 characters',
     ],
     minlength: [
       10,

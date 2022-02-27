@@ -6,7 +6,7 @@ const feedBackSchema = new mongoose.Schema({
     required: [true, 'A feedBack must have a title'],
     trim: true,
     maxlength: [
-      10,
+      30,
       'A feedBack title must have less or equal than 10 characters',
     ],
     minlength: [

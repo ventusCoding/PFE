@@ -1,28 +1,62 @@
 const nodemailer = require('nodemailer');
+const htmlToText = require('html-to-text');
+const ejs = require('ejs');
 
-const sendEmail = async (options) => {
-  // 1) Create a transporter
+module.exports = class Email {
+  constructor(user, url) {
+    this.to = user.email;
+    this.firstName = user.name.split(' ')[0];
+    this.url = url;
+    this.from = `HK Consulting <${process.env.EMAIL_FROM}>`;
+  }
 
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: process.env.EMAIL_USERNAME,
-      pass: process.env.EMAIL_PASSWORD,
-    },
-  });
+  newTransport() {
+    // if (process.env.NODE_ENV === 'production') {
+    //   //sendgrid
+    //   return 1;
+    // }
 
-  // 2) Define the email options
+    return nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_FROM,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+    });
+  }
 
-  const mailOptions = {
-    from: 'Anwer Baccar',
-    to: options.email,
-    subject: options.subject,
-    text: options.message,
-  };
+  async send(template, subject) {
+    //send the actual email
 
-  // 3) Actually send the email
+    //render html based on a ejs template
+    const html = await ejs.renderFile(
+      `${__dirname}/../views/email/${template}.ejs`,
+      {
+        firstName: this.firstName,
+        url: this.url,
+        subject,
+      }
+    );
 
-  await transporter.sendMail(mailOptions);
+    const mailOptions = {
+      from: this.from,
+      to: this.to,
+      subject,
+      html,
+      text: htmlToText.fromString(html),
+    };
+
+    await this.newTransport().sendMail(mailOptions);
+  }
+
+  async sendWelcome() {
+    await this.send('welcome', 'Welcome to the PFE Family!');
+  }
+
+  async sendPasswordReset() {
+    await this.send(
+      'passwordReset',
+      'Your password reset token (valid for only 10 minutes)'
+    );
+  }
 };
-
-module.exports = sendEmail;

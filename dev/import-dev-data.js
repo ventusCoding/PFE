@@ -153,19 +153,22 @@ const deleteReportData = async () => {
 };
 
 if (process.argv[2] == '--import') {
-  importUserData();
-  importVisitData();
-  importCommentData();
+  // importUserData();
+  // importVisitData();
+  // importCommentData();
   importReportData();
-  importObjectData();
-  importFeedbackData();
+  // importObjectData();
+  // importFeedbackData();
+
 } else if (process.argv[2] === '--delete') {
-  deleteUserData();
-  deleteVisitData();
-  deleteCommentData();
-  deleteReportData();
-  deleteObjectData();
-  deleteFeedbackData();
+  // deleteUserData();
+  // deleteVisitData();
+  // deleteCommentData();
+  // deleteReportData();
+  // deleteObjectData();
+  // deleteFeedbackData();
 }
+
+
 
 console.log(process.argv);

@@ -5,7 +5,7 @@ const objectSchema = new mongoose.Schema({
     type: String,
     required: [true, 'A model must have a name'],
     trim: true,
-    maxlength: [20, 'A model name must have less or equal than 20 characters'],
+    maxlength: [50, 'A model name must have less or equal than 50 characters'],
     minlength: [3, 'A model name must have more or equal than 3 characters'],
   },
   modelfbx: {
