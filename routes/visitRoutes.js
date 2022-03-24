@@ -48,12 +48,6 @@ router
     authController.protect,
     visitController.getVisitById
   )
-  .patch(
-    authController.protect,
-    authController.restrictTo('premium'),
-    objectController.uploadModel,
-    visitController.updateVisit
-  )
   .delete(
     authController.protect,
     authController.restrictTo('premium',"admin"),

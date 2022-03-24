@@ -70,19 +70,18 @@ exports.resendVerificationEmail = catchAsync(async (req, res, next) => {
 });
 
 exports.signup = catchAsync(async (req, res, next) => {
-  const newUser = await User.create({
+  let userData = {
     name: req.body.name,
     email: req.body.email,
     password: req.body.password,
     passwordConfirm: req.body.passwordConfirm,
-  });
+  };
 
   if (req.file) {
-    req.body.photo = req.file.filename;
-    console.log('found file');
-    console.log(req.body.photo);
-    console.log(req.file.filename);
+    userData.photo = req.file.filename;
   }
+
+  const newUser = await User.create(userData);
 
   const resetToken = newUser.createVerificationToken();
   await newUser.save({ validateBeforeSave: false });
@@ -200,6 +199,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
     res.status(200).json({
       status: 'success',
       message: 'Token sent to email!',
+      url: resetURL,
     });
   } catch (err) {
     user.passwordResetToken = undefined;

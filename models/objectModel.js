@@ -9,10 +9,19 @@ const objectSchema = new mongoose.Schema({
     minlength: [3, 'A model name must have more or equal than 3 characters'],
   },
   modelfbx: {
+    type: [String],
+    trim: true,
+  },
+  description: {
     type: String,
     trim: true,
-    unique: [true, 'Models cannot have the same name.'],
+    required: [true, "A Model must Have a description"],
   },
+  imageCover: {
+    type: String,
+    default: 'no-image.png',
+  },
+  images: [String],
   user: {
     type: mongoose.Schema.ObjectId,
     ref: 'User',

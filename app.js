@@ -21,6 +21,8 @@ const fs = require('fs');
 
 const app = express();
 
+app.use(cookieParser());
+
 app.use(cors());
 
 app.use(helmet());
@@ -39,7 +41,6 @@ app.use('/api', limiter);
 
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
-app.use(cookieParser());
 
 app.use(mongoSanitize());
 

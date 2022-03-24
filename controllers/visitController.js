@@ -58,36 +58,6 @@ exports.createVisit = catchasync(async (req, res, next) => {
   res.status(201).json({ status: 'success', data: { visit: newVisit } });
 });
 
-exports.updateVisit = catchasync(async (req, res, next) => {
-  const visit = await VisitModel.findById(req.params.id);
-
-  if (!visit) {
-    return next(new AppError('No object found with that ID', 404));
-  }
-
-  let obj = {};
-
-  if (req.file) {
-    obj.modelfbx = req.file.filename;
-  }
-
-  if (Object.keys(obj).length === 0) {
-    return next(new AppError('Nothing to update', 404));
-  }
-
-  await ModelObject.findByIdAndUpdate(visit.modelfbx, obj, {
-    new: true,
-    runValidators: true,
-  });
-
-  res.status(200).json({
-    status: 'success',
-    data: {
-      visit,
-    },
-  });
-});
-
 exports.addUsersToVisit = catchasync(async (req, res, next) => {
   if (!req.body.users) {
     return next(new AppError('You need to choose a users to add them.', 400));

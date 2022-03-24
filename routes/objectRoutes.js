@@ -2,7 +2,6 @@ const express = require('express');
 const objectController = require('../controllers/objectControllers');
 const authController = require('../controllers/authController');
 
-
 const router = express.Router();
 
 router
@@ -14,16 +13,34 @@ router
   );
 
 router
+  .route('/deleteObjectsFromModelList')
+  .delete(
+    authController.protect,
+    authController.restrictTo('premium'),
+    objectController.deleteObjectsFromList
+  );
+
+  router
+  .route('/deleteImagesFromImagesList')
+  .delete(
+    authController.protect,
+    authController.restrictTo('premium'),
+    objectController.deleteImagesFromList
+  );
+
+
+router
   .route('/')
   .get(
     authController.protect,
-    authController.restrictTo('admin'),
+    // authController.restrictTo('admin'),
     objectController.getAllObjects
   )
   .post(
     authController.protect,
     authController.restrictTo('premium'),
     objectController.uploadModel,
+
     objectController.createObject
   );
 
