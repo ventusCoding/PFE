@@ -9,13 +9,24 @@ const sharp = require('sharp');
 const multerStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     if (file.mimetype.startsWith('image')) {
+      if (file.fieldname === 'modelfbx') {
+        return cb(
+          new AppError('You Cannot Images in the 3d models field', 400)
+        );
+      }
+
       cb(null, `public/img/models`);
     } else {
+      if (file.fieldname === 'imageCover' || file.fieldname === 'images') {
+        return cb(
+          new AppError('You Cannot Upload 3d models in the images field', 400)
+        );
+      }
       cb(null, `protected_files/models`);
     }
   },
   filename: catchasync(async (req, file, cb) => {
-    const fileArray = file.originalname.split('.')
+    const fileArray = file.originalname.split('.');
     if (file.mimetype.startsWith('image')) {
       const ext = fileArray[fileArray.length - 1];
       modelName = fileArray[0];
@@ -23,8 +34,10 @@ const multerStorage = multer.diskStorage({
     } else {
       const ext = fileArray[fileArray.length - 1];
       modelName = fileArray[0];
-      if (ext !== 'fbx') {
-        return cb(new AppError('A model must have a model file .fbx', 400));
+      if (ext !== 'gltf' && ext !== 'glb') {
+        return cb(
+          new AppError('A model must have a model file .gltf or .glb', 400)
+        );
       }
 
       cb(null, `model-${modelName}-${uuid()}-${Date.now()}.${ext}`);
@@ -92,6 +105,19 @@ exports.getObjectById = catchasync(async (req, res, next) => {
 exports.updateObject = catchasync(async (req, res, next) => {
   let obj = {};
 
+  if (req.body.arrayToPass) {
+    const oldModel = await ModelObject.findById(req.params.id);
+    const saveImage = [];
+
+    for (let i = 0; i < oldModel.images.length; i++) {
+      if (req.body.arrayToPass.indexOf(oldModel.images[i]) !== -1) {
+        saveImage.push(oldModel.images[i]);
+      }
+    }
+
+    obj.images = saveImage;
+  }
+
   if (req.body.name) {
     obj.name = req.body.name;
   }
@@ -107,9 +133,12 @@ exports.updateObject = catchasync(async (req, res, next) => {
   }
 
   if (req.files.images) {
-    const oldModel = await ModelObject.findById(req.params.id);
+    // const oldModel = await ModelObject.findById(req.params.id);
     const images = req.files.images.map((file) => file.filename);
-    obj.images = oldModel.images.concat(images);
+    // obj.images = oldModel.images.concat(images);
+    // obj.images = images;
+    const concatedImages = obj.images.concat(images);
+    obj.images = concatedImages;
   }
 
   if (req.files.imageCover) {
@@ -133,7 +162,6 @@ exports.updateObject = catchasync(async (req, res, next) => {
   });
 });
 
-
 exports.deleteImagesFromList = catchasync(async (req, res, next) => {
   const oldModel = await ModelObject.findById(req.body.id);
 
@@ -146,7 +174,7 @@ exports.deleteImagesFromList = catchasync(async (req, res, next) => {
   const updatedObj = await ModelObject.findByIdAndUpdate(
     req.body.id,
     {
-      images
+      images,
     },
     {
       new: true,
@@ -161,7 +189,6 @@ exports.deleteImagesFromList = catchasync(async (req, res, next) => {
     },
   });
 });
-
 
 exports.deleteObjectsFromList = catchasync(async (req, res, next) => {
   const oldModel = await ModelObject.findById(req.body.id);
@@ -243,23 +270,12 @@ exports.getCurrentUserObjects = catchasync(async (req, res, next) => {
 
   const objects = await features.query;
 
-  if (objects.length > 0) {
-    res.status(200).json({
-      status: 'success',
-      requestedAt: req.requestTime,
-      results: objects.length,
-      data: {
-        objects,
-      },
-    });
-  } else {
-    res.status(404).json({
-      status: 'fail',
-      results: 0,
-      data: {
-        objects,
-      },
-      message: 'No Data Found!',
-    });
-  }
+  res.status(200).json({
+    status: 'success',
+    requestedAt: req.requestTime,
+    results: objects.length,
+    data: {
+      objects,
+    },
+  });
 });

@@ -14,6 +14,13 @@ router
   );
 
 router
+  .route('/belongVisits')
+  .get(
+    authController.protect,
+    visitController.getBelongVisits
+  );
+
+router
   .route('/addUsersToVisit')
   .patch(
     authController.protect,
@@ -21,11 +28,11 @@ router
     visitController.addUsersToVisit
   );
 
-  router
+router
   .route('/deleteUsersToVisit')
   .patch(
     authController.protect,
-    authController.restrictTo('premium',"admin"),
+    authController.restrictTo('premium', 'admin'),
     visitController.deleteUserFromVisit
   );
 
@@ -44,13 +51,10 @@ router
 
 router
   .route('/:id')
-  .get(
-    authController.protect,
-    visitController.getVisitById
-  )
+  .get(authController.protect, visitController.getVisitById)
   .delete(
     authController.protect,
-    authController.restrictTo('premium',"admin"),
+    authController.restrictTo('premium', 'admin'),
     visitController.deleteVisit
   );
 

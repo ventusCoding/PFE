@@ -44,6 +44,7 @@ exports.createVisit = catchasync(async (req, res, next) => {
     return next(new AppError('No object found with that ID', 404));
   }
 
+
   if (model[0].user.toString() !== req.user._id.toString()) {
     return next(
       new AppError('You are not authorized to access this object', 401)
@@ -53,6 +54,8 @@ exports.createVisit = catchasync(async (req, res, next) => {
   const newVisit = await VisitModel.create({
     userOwner: req.user,
     modelfbx: req.body.modelfbx,
+    name: req.body.name,
+    description: req.body.description,
   });
 
   res.status(201).json({ status: 'success', data: { visit: newVisit } });
@@ -134,6 +137,21 @@ exports.getVisitById = catchasync(async (req, res, next) => {
 
   res.status(200).json({ status: 'success', data: { visit } });
 });
+
+exports.getBelongVisits = catchasync(async (req, res, next) => {
+  const user = await User.findById(req.user._id);
+
+  if (!user) {
+    return next(new AppError('No user found with that ID', 404));
+  }
+
+  const visits = await VisitModel.find({
+    users: { _id: mongoose.Types.ObjectId(req.user._id.valueOf()) },
+  });
+
+  res.status(200).json({ status: 'success', data: { visits } });
+});
+
 
 exports.getCurrentUserVisits = catchasync(async (req, res, next) => {
   const features = new APIFeatures(

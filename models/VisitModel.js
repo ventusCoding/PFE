@@ -2,6 +2,18 @@ const mongoose = require('mongoose');
 
 const visitSchema = new mongoose.Schema(
   {
+    name: {
+      type: String,
+      required: [true, 'A visit must have a name'],
+      trim: true,
+      maxlength: [50, 'A visit name must have less or equal than 50 characters'],
+      minlength: [3, 'A visit name must have more or equal than 3 characters'],
+    },
+    description: {
+      type: String,
+      trim: true,
+      required: [true, "A visit must Have a description"],
+    },
     userOwner: {
       type: mongoose.Schema.ObjectId,
       ref: 'User',
@@ -37,6 +49,15 @@ visitSchema.pre(/^find/, function (next) {
   }).populate({
     path: 'users',
     select: 'name photo',
+  });
+
+  next();
+});
+
+visitSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'modelfbx',
+    select: 'name imageCover images modelfbx',
   });
 
   next();

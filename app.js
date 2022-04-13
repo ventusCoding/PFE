@@ -57,9 +57,9 @@ app.set('view engine', 'ejs');
 
 app.get(
   '/file/:path',
-  authController.protect,
-  authController.restrictTo('premium'),
-  authController.protectModels,
+  // authController.protect,
+  // authController.restrictTo('premium'),
+  // authController.protectModels,
   function (req, res) {
     const path = 'protected_files/models/' + req.params.path;
     const stream = fs.createReadStream(path);
