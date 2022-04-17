@@ -1,4 +1,5 @@
 const express = require('express');
+const http = require('http');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
@@ -19,7 +20,21 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const fs = require('fs');
 
+const socketGateway = require('./socket').socketGateway;
+const socketMiddleware = require('./socket').socketMiddleware;
+
+const Server = require('socket.io').Server;
+
 const app = express();
+const server = http.createServer(app);
+
+const io = new Server(server, {
+  cors: { origin: '*' },
+});
+
+io.use(socketMiddleware);
+
+io.on('connection',(socket) => socketGateway(socket,io));
 
 app.use(cookieParser());
 
@@ -82,4 +97,5 @@ app.all('*', (req, res, next) => {
 
 app.use(globalErrorHandler);
 
-module.exports = app;
+module.exports = {server, io};
+

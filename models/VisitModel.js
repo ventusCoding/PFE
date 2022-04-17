@@ -63,6 +63,15 @@ visitSchema.pre(/^find/, function (next) {
   next();
 });
 
+visitSchema.pre(/^save/, function (next) {
+  this.populate({
+    path: 'modelfbx',
+    select: 'name imageCover images modelfbx',
+  });
+
+  next();
+});
+
 visitSchema.virtual('comments', {
   ref: 'Comment',
   foreignField: 'visit',

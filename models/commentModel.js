@@ -4,7 +4,6 @@ const commentSchema = new mongoose.Schema(
   {
     description: {
       type: String,
-      required: [true, 'A comment must have a description'],
       trim: true,
       maxlength: [
         255,
@@ -16,6 +15,9 @@ const commentSchema = new mongoose.Schema(
       type: mongoose.Schema.ObjectId,
       ref: 'User',
       required: [true, 'Comment must belong to a user.'],
+    },
+    image: {
+      type: String,
     },
     visit: {
       type: mongoose.Schema.ObjectId,

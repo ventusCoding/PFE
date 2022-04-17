@@ -45,7 +45,7 @@ router
   .route('/')
   .get(
     authController.protect,
-    authController.restrictTo('admin'),
+    authController.restrictTo('premium'),
     userController.getAllUsers
   );
 

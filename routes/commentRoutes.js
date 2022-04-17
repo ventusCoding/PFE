@@ -5,7 +5,14 @@ const mongoose = require('mongoose');
 
 const router = express.Router();
 
-router.route('/').post(authController.protect, commentController.createComment);
+router
+  .route('/')
+  .post(
+    authController.protect,
+    commentController.uploadCommentPhoto,
+    commentController.resizeCommentPhoto,
+    commentController.createComment
+  );
 
 router
   .route('/:id')

@@ -44,7 +44,7 @@ exports.resizeUserPhoto = catchasync(async (req, res, next) => {
     req.file.filename = `user-${uuid()}-${Date.now()}.jpeg`;
   }
 
-  console.log(req.file);
+
 
   await sharp(req.file.buffer)
     .resize(500, 500)
@@ -64,7 +64,13 @@ const filterObj = (obj, ...allowedFields) => {
 };
 
 exports.getAllUsers = catchasync(async (req, res, next) => {
-  const features = new APIFeatures(User.find(), req.query)
+  // not equale current user
+  const features = new APIFeatures(
+    User.find({
+      _id: { $ne: req.user.id },
+    }),
+    req.query
+  )
     .filter()
     .sort()
     .limitFields()
@@ -72,29 +78,17 @@ exports.getAllUsers = catchasync(async (req, res, next) => {
 
   const users = await features.query;
 
-  if (users.length > 0) {
-    res.status(200).json({
-      status: 'success',
-      requestedAt: req.requestTime,
-      results: users.length,
-      data: {
-        users,
-      },
-    });
-  } else {
-    res.status(404).json({
-      status: 'fail',
-      results: 0,
-      data: {
-        users,
-      },
-      message: 'No Data Found!',
-    });
-  }
+  res.status(200).json({
+    status: 'success',
+    requestedAt: req.requestTime,
+    results: users.length,
+    data: {
+      users,
+    },
+  });
 });
 
 exports.getUserById = catchasync(async (req, res, next) => {
-
   const user = await User.findById(req.params.id);
 
   res.status(200).json({
@@ -122,8 +116,7 @@ exports.deleteUserByAdmin = catchasync(async (req, res, next) => {
 });
 
 exports.updateMe = catchasync(async (req, res, next) => {
-  // console.log(req.file);
-  // console.log(req.body);
+
 
   if (req.body.password || req.body.passwordConfirm) {
     return next(

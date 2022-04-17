@@ -15,10 +15,7 @@ router
 
 router
   .route('/belongVisits')
-  .get(
-    authController.protect,
-    visitController.getBelongVisits
-  );
+  .get(authController.protect, visitController.getBelongVisits);
 
 router
   .route('/addUsersToVisit')
@@ -52,6 +49,7 @@ router
 router
   .route('/:id')
   .get(authController.protect, visitController.getVisitById)
+  .patch(authController.protect, visitController.updateVisit)
   .delete(
     authController.protect,
     authController.restrictTo('premium', 'admin'),

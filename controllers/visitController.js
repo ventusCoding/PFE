@@ -128,7 +128,7 @@ exports.getVisitById = catchasync(async (req, res, next) => {
       });
     }
 
-    console.log(user);
+
 
     if (user.length <= 0) {
       return next(new AppError('User is not in visit', 404));
@@ -198,7 +198,7 @@ exports.deleteUserFromVisit = catchasync(async (req, res, next) => {
   if (!visit) {
     return next(new AppError('No Visit found with that ID', 404));
   }
-  console.log(req.user.role);
+
   if (
     visit.userOwner._id.toString() !== req.user._id.toString() &&
     req.user.role.localeCompare('admin') !== 0
@@ -213,6 +213,29 @@ exports.deleteUserFromVisit = catchasync(async (req, res, next) => {
   await VisitModel.findByIdAndUpdate(req.body.visit, visit);
 
   res.status(200).json({ status: 'success', data: { visit: visit } });
+});
+
+exports.updateVisit = catchasync(async (req, res, next) => {
+  const visit = await VisitModel.findById(req.params.id);
+  
+
+  if (!visit) {
+    return next(new AppError('No Visit found with that ID', 404));
+  }
+
+  if (visit.userOwner._id.toString() !== req.user._id.toString()) {
+    return next(
+      new AppError('You are not authorized to access this visit', 401)
+    );
+  }
+
+  visit.name = req.body.name;
+  visit.description = req.body.description;
+
+  await visit.save();
+
+  res.status(200).json({ status: 'success', data: { visit } });
+
 });
 
 exports.deleteVisit = catchasync(async (req, res, next) => {
@@ -240,7 +263,7 @@ exports.deleteVisit = catchasync(async (req, res, next) => {
 
 function containsAny(source, target) {
   var result = source.filter(function (item) {
-    console.log(item._id.toHexString());
+
     return !(target.indexOf(item._id.toHexString()) > -1);
   });
   return result;

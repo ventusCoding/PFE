@@ -48,7 +48,7 @@ exports.resendVerificationEmail = catchAsync(async (req, res, next) => {
 
   const newUser = user[0];
 
-  console.log(newUser);
+ 
 
   const resetToken = newUser.createVerificationToken();
   await newUser.save({ validateBeforeSave: false });
@@ -121,7 +121,7 @@ exports.login = catchAsync(async (req, res, next) => {
     );
   }
 
-  console.log(user.verified);
+
 
   createSendToken(user, 200, res);
 });
@@ -229,7 +229,7 @@ exports.verifyEmail = catchAsync(async (req, res, next) => {
 
   const verifiedUser = await User.findById(user._id);
 
-  console.log(verifiedUser);
+
 
   // createSendToken(verifiedUser, 200, res);
 
